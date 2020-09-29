@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Javascript Game</title>
+
+    <style>
+        * { padding:0;margin:0;}
+        canvas { 
+            background:hsl(76, 92%, 48%); 
+            display:block; 
+            margin: 0 auto;
+            }
+
+    </style>
+
+</head>
+
+
+
+
+<body>
+    
+<canvas id="myCanvas" width ="480" height="320"></canvas>
+    
+<button id="start">starta</button>
+    
+
+
+
+<script>
+       
+// Ritar en rund boll i canvas
+function drawWheelPart(x,y,radius,color) {
+    ctx.beginPath();
+    ctx.arc(x, y, radius, 0, Math.PI*2);
+    ctx.fillStyle = color;
+    ctx.fill();
+    ctx.closePath();
+}
+
+// Ritar en rektangle i canvas
+function drawBodyPart(x,y,width,height,color){
+    ctx.beginPath();
+    ctx.rect(x,y, width, height);
+    ctx.fillStyle = color;
+    ctx.fill();
+    ctx.closePath();
+}
+
+function drawBody(x,y){
+    //drawBodyPart(20,50,50,bodyHeight,"#0ae92f");
+    drawBodyPart(x,y,50,bodyHeight,"#0ae92f");
+    drawBodyPart(x+15,y-15,20,15,"#0095DD");
+}
+
+function drawWheel(x,y){
+    //drawWheelPart(x,70,8,"#ff0000");
+    drawWheelPart(x,y,8,"#ff0000");
+
+    //drawWheelPart(x,70,4,"#000000");
+    drawWheelPart(x,y,4,"#000000");
+}
+
+
+// Ritar en bil i canvas
+function drawCar(x,y){
+    //xled=20;
+    //yled=50;
+
+    //Rensa skärmen
+    drawBody(x,y);
+    //drawWheel(30);
+    drawWheel(x+10,y+20);
+    
+    //drawWheel(60);
+    drawWheel(x+40,y+20);
+}
+ 
+function keyDown(e){
+  console.log(e);
+
+  if (e.key === 'ArrowRight') {
+    console.log("pil höger tryckt");
+    arrowRightPressed = true;
+  }
+
+}
+
+function keyUp(){
+    arrowRightPressed = false;
+}
+ 
+
+// Kopplar ihop canvas med variabelnamn 
+let canvas = document.getElementById("myCanvas");
+let ctx = canvas.getContext("2d");
+document.getElementById("start").addEventListener("click",startTryckt);
+
+document.addEventListener("keydown",keyDown);
+document.addEventListener("keyup",keyUp);
+
+let arrowRightPressed = false;
+
+let bodyHeight = 20;
+let xled =50;
+let yled = 50;
+
+function createCars(){
+    let lista =[];
+
+    // Koordinater till bil 1
+    let item ={  
+        x:20,
+        y:50
+    }
+    //fruits.push("Kiwi");
+    lista.push(item);
+    // Koordinater till bil 2
+    let item2 ={  
+        x:20,
+        y:150
+    }
+       
+    lista.push(item2);
+    return lista;
+}
+
+let lista = createCars();
+
+let startad = false;
+
+function startTryckt(){
+    if(!startad)starta();
+}
+
+function starta(){
+    
+    startad=true;
+
+    let carX = 20;
+    let carY = 50;
+    
+    let game = setInterval(() => {
+        
+        // rensa canvas
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+        // Rita bilar i canvas
+        //lista[0].x ,lista[0].y
+        //drawCar(lista[0].x +=2,lista[0].y);
+        //drawCar(carX,150);
+
+        /*
+        ett annat sätt att göra en loop genom en lista
+        for(i=0;i<lista.length;i++){
+        }
+        */
+        lista.forEach(item =>{
+        
+            if(arrowRightPressed){
+                item.x+=2;
+            }
+            drawCar(item.x,item.y)
+        });
+                    // Öka x position efter varje intervall
+        //carX+=2;
+    
+        // Kolla så att bilen inte är utanför canvas
+        //if(carX>canvas.width)clearInterval(game);
+    
+    }, 20);
+
+
+}
+
+</script>
+    
+
+</body>
+</html>
